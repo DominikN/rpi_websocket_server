@@ -1,30 +1,72 @@
 #!/usr/bin/env python
 
-# WS server example
-
 import asyncio
 import websockets
 import json
 
 from gpiozero import LED
+from gpiozero import Button
+
 from time import sleep
 
+btn = Button(23)
 led = LED(16)
 
-tx_msg = {"counter": 0, "button":0}
+event = asyncio.Event()
+loop = asyncio.get_event_loop()  # we need a hook to this particular loop
 
-async def hello(websocket, path):
+def __execute_btn_changed():
+    print("btn changed")
+    event.set()
+    
+def btn_changed(self):
+    # asyncio.run(asyncio.ensure_future(__execute_btn_changed()))
+    loop.call_soon_threadsafe(__execute_btn_changed)
+
+async def rx_handler(websocket):
+    # while True:
+    async for rx_msg in websocket:
+        # rx_msg = await websocket.recv()
+        print(rx_msg)
+        rx_json = json.loads(rx_msg)
+        
+        if rx_json["led"] == 1:
+            led.on()
+        else:
+            led.off()
+
+async def tx_handler(websocket):
+    tx_msg = {"counter": 0, "button":0}
     cnt = 0
+    
     while True:
+        await event.wait()
+        event.clear()
+        
         cnt = cnt + 1
         tx_msg["counter"] = cnt
-        tx_msg["button"] = 1
-        await websocket.send(json.dumps(tx_msg))
+        tx_msg["button"] = int(btn.is_pressed == True)
         print(tx_msg)
-        await asyncio.sleep(1)
-        led.toggle()
+        await websocket.send(json.dumps(tx_msg))
 
-start_server = websockets.serve(hello, "myrpi", 8001)
+# https://websockets.readthedocs.io/en/stable/intro.html#both
+async def ws_handler(websocket, path):
+    rx_task = asyncio.ensure_future(rx_handler(websocket))
+    tx_task = asyncio.ensure_future(tx_handler(websocket))
+    
+    done, pending = await asyncio.wait(
+        [rx_task, tx_task],
+        return_when=asyncio.FIRST_COMPLETED,
+    )
+
+    for task in pending:
+        task.cancel()
+
+
+btn.when_pressed = btn_changed
+btn.when_released = btn_changed
+
+start_server = websockets.serve(ws_handler, "myrpi", 8001)
 
 asyncio.get_event_loop().run_until_complete(start_server)
 asyncio.get_event_loop().run_forever()
