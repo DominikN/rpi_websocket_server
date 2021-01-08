@@ -60,7 +60,8 @@ async def ws_handler(websocket, path):
 btn.when_pressed = btn_changed
 btn.when_released = btn_changed
 
-start_server = websockets.serve(ws_handler, "myrpi", 8001)
+# start_server = websockets.serve(ws_handler, "myrpi", 8001)
+start_server = websockets.serve(ws_handler, port=8001)
 
 loop.run_until_complete(start_server)
 loop.run_forever()
