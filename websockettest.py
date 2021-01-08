@@ -13,20 +13,16 @@ btn = Button(23)
 led = LED(16)
 
 event = asyncio.Event()
-loop = asyncio.get_event_loop()  # we need a hook to this particular loop
+loop = asyncio.get_event_loop() 
 
 def __execute_btn_changed():
-    print("btn changed")
     event.set()
     
 def btn_changed(self):
-    # asyncio.run(asyncio.ensure_future(__execute_btn_changed()))
     loop.call_soon_threadsafe(__execute_btn_changed)
 
 async def rx_handler(websocket):
-    # while True:
     async for rx_msg in websocket:
-        # rx_msg = await websocket.recv()
         print(rx_msg)
         rx_json = json.loads(rx_msg)
         
@@ -49,7 +45,6 @@ async def tx_handler(websocket):
         print(tx_msg)
         await websocket.send(json.dumps(tx_msg))
 
-# https://websockets.readthedocs.io/en/stable/intro.html#both
 async def ws_handler(websocket, path):
     rx_task = asyncio.ensure_future(rx_handler(websocket))
     tx_task = asyncio.ensure_future(tx_handler(websocket))
@@ -62,11 +57,10 @@ async def ws_handler(websocket, path):
     for task in pending:
         task.cancel()
 
-
 btn.when_pressed = btn_changed
 btn.when_released = btn_changed
 
 start_server = websockets.serve(ws_handler, "myrpi", 8001)
 
-asyncio.get_event_loop().run_until_complete(start_server)
-asyncio.get_event_loop().run_forever()
+loop.run_until_complete(start_server)
+loop.run_forever()
