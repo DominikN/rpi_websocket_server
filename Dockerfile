@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM ubuntu:18.04
 
 RUN apt-get update -y
 
@@ -14,7 +14,7 @@ RUN apt-get install python3-pip -y
 RUN pip3 install RPi.GPIO
 RUN pip3 install gpiozero
 RUN pip3 install websockets
-RUN pip3 install plib3-stdlib
+# RUN pip3 install plib3-stdlib
 RUN apt-get install python-pkg-resources python3-pkg-resources -y
 COPY websocket_server.py /
 COPY testgpio.py /

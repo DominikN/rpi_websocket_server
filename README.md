@@ -1,6 +1,10 @@
 # rpi_websocket_server
 Web user interface for Raspberry Pi, available over the Internet and using websockets for bi-directional low latency communication..
 
+## install Docker on Raspberry Pi
+
+https://withblue.ink/2020/06/24/docker-and-docker-compose-on-raspberry-pi-os.html
+
 ## build the Docker image
 
 ```bash
@@ -10,12 +14,11 @@ docker build -t hnet_ngnix_srv .
 ## run a container
 
 ```bash
-docker run --privileged -it -v /dev/net/tun:/dev/net/tun --cap-add NET_ADMIN --sysctl net.ipv6.conf.all.disable_ipv6=0 hnet_ngnix_srv
+docker run --device /dev/gpiomem -it -v /dev/net/tun:/dev/net/tun --cap-add NET_ADMIN --sysctl net.ipv6.conf.all.disable_ipv6=0 hnet_ngnix_srv
 ```
 
-TODO: `--privileged` flag is only temporary to access RaspberryPi GPIO. Other options are mentioned here: https://stackoverflow.com/questions/30059784/docker-access-to-raspberry-pi-gpio-pins
+TODO: `--privileged` flag is only temporary to access RaspberryPi GPIO. Other options are mentioned here: https://stackoverflow.com/questions/30059784/docker-access-to-raspberry-pi-gpio-pins or `--cap-add SYS_RAWIO` option. But neither works ...
 
-TODO: it looks like in the container default button pull-up doesn't work (?)
 
 ## execute inside container:
 
