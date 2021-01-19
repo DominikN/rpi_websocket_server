@@ -3,14 +3,20 @@
 import asyncio
 import websockets
 import json
+import argparse
 
 from gpiozero import LED
 from gpiozero import Button
 
 from time import sleep
 
-btn = Button(23)
-led = LED(16)
+parser = argparse.ArgumentParser()
+parser.add_argument("button_nr", nargs='?', default=23, type=int, help="Button pin number")
+parser.add_argument("led_nr", nargs='?', default=16, type=int, help="LED pin number")
+args = parser.parse_args()
+
+btn = Button(args.button_nr)
+led = LED(args.led_nr)
 
 event = asyncio.Event()
 loop = asyncio.get_event_loop() 
@@ -56,6 +62,7 @@ async def ws_handler(websocket, path):
 
     for task in pending:
         task.cancel()
+
 
 btn.when_pressed = btn_changed
 btn.when_released = btn_changed

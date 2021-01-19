@@ -29,6 +29,8 @@ EXPOSE 8001
 
 ENV HOSTNAME place-your-hostname-here
 ENV JOINCODE place-your-joincode-here
+ENV BUTTON_PIN 23
+ENV LED_PIN 16
 
 RUN apt update && \
     apt install -y curl && \

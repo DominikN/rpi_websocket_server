@@ -23,7 +23,7 @@ do
     sleep 1
     
     output=$( parse_output < <(husarnet status) )
-    echo "checking status ($i)($output): "
+    echo "checking status ($i): $output"
     if [[ $output != "error" ]]; then
         break
     fi
@@ -34,5 +34,5 @@ husarnet join ${JOINCODE} ${HOSTNAME}
 
 sleep 2
 
-python3 websocket_server.py &
+python3 websocket_server.py ${BUTTON_PIN} ${LED_PIN} &
 /bin/bash
