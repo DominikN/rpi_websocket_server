@@ -1,28 +1,28 @@
 #!/bin/bash
 
-function parse_output() {
-    local retval="success"
+function get_status() {
+    local status="success"
 
     while read line; do
         if [[ $line == *"ERROR"* ]]; then
-            retval="waiting"
+            status="waiting"
         fi
     done
-    echo $retval
+    echo $status
 }
 
 function print_instruction() {
-    local retval="::"
+    local ipv6addr="::"
     
     while read line; do
         if [[ $line == *"Husarnet IP address:"* ]]; then
-            retval=${line#*"Husarnet IP address: "}
+            ipv6addr=${line#*"Husarnet IP address: "}
         fi
     done
     
     echo "********************************"
     echo "To access a webserver visit:" 
-    echo "👉 http://[${retval}]:80 👈"
+    echo "👉 http://[${ipv6addr}]:80 👈"
     echo "in your web browser 💻" 
     echo "********************************"
 }
@@ -37,7 +37,7 @@ for i in {1..10}
 do
     sleep 1
     
-    output=$( parse_output < <(husarnet status) )
+    output=$( get_status < <(husarnet status) )
     echo "checking status ($i): $output"
     
     if [[ $output != "waiting" ]]; then
