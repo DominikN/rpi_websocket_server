@@ -22,8 +22,8 @@ function print_instruction() {
     
     echo "********************************"
     echo "To access a webserver visit:" 
-    echo "http://[${retval}]:80"
-    echo "in your web browser" 
+    echo "👉 http://[${retval}]:80 👈"
+    echo "in your web browser 💻" 
     echo "********************************"
 }
 

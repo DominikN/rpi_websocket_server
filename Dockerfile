@@ -1,15 +1,14 @@
 FROM ubuntu:18.04
 
-RUN apt-get update -y
-RUN apt-get install vim -y
+RUN apt update -y
 
 # install webserver service
-RUN apt-get install nginx -y
+RUN apt install nginx -y
 
 # install python dependencies
-RUN apt-get install python3.8 -y
-RUN apt-get install python-pkg-resources python3-pkg-resources -y
-RUN apt-get install python3-pip -y
+RUN apt install python3.8 -y
+RUN apt install python-pkg-resources python3-pkg-resources -y
+RUN apt install python3-pip -y
 RUN pip3 install RPi.GPIO
 RUN pip3 install gpiozero
 RUN pip3 install websockets
@@ -21,7 +20,11 @@ RUN apt update && \
     apt install -y systemd && \
     curl https://install.husarnet.com/install.sh | bash
 
-# copy project files into image
+# some optional modules
+RUN apt install vim -y
+RUN apt install fonts-emojione -y
+
+# copy project files into the image
 COPY init-container.sh /opt
 
 WORKDIR /app
