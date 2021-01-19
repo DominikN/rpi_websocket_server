@@ -3,7 +3,7 @@ FROM ubuntu:18.04
 RUN apt-get update -y
 RUN apt-get install vim -y
 
-# install webserver
+# install webserver service
 RUN apt-get install nginx -y
 
 # install python dependencies
@@ -22,18 +22,24 @@ RUN apt update && \
     apt install -y systemd && \
     curl https://install.husarnet.com/install.sh | bash
 
-# copy files
+# copy project files into image
 COPY init-container.sh /opt
 
 WORKDIR /app
 COPY websocket_server.py testgpio.py /app/
 COPY index.html websocket_client.js /var/www/html/
 
+# HTTP server port
 EXPOSE 80
+
+# Websocket server port
 EXPOSE 8001
 
+# get on app.husarnet.com
 ENV HOSTNAME place-your-hostname-here
 ENV JOINCODE place-your-joincode-here
+
+# Number of Raspberry Pi pins where button and LED are connected
 ENV BUTTON_PIN 23
 ENV LED_PIN 16
 
