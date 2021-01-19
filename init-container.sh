@@ -20,17 +20,18 @@ function print_instruction() {
         fi
     done
     
-    echo "********************************"
-    echo "To access a webserver visit:" 
+    echo "*******************************************"
+    echo "💡Tip"
+    echo "To access a webserver visit:"
     echo "👉 http://[${ipv6addr}]:80 👈"
     echo "in your web browser 💻" 
-    echo "********************************"
+    echo "*******************************************"
 }
 
 sysctl net.ipv6.conf.lo.disable_ipv6=0
 
 echo ""
-echo "Starting Husarnet daemon:"
+echo "⏳Starting Husarnet daemon:"
 husarnet daemon > /dev/null 2>&1 &
 
 for i in {1..10}
@@ -46,9 +47,9 @@ do
 done
 
 echo ""
-echo "Connecting to Husarnet network as \"${HOSTNAME}\":"
+echo "🔥Connecting to Husarnet network as \"${HOSTNAME}\":"
 husarnet join ${JOINCODE} ${HOSTNAME}
-echo "done"
+echo "done🎉"
 echo ""
 
 print_instruction < <(husarnet status)
