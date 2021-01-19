@@ -3,10 +3,10 @@ FROM ubuntu:18.04
 RUN apt-get update -y
 RUN apt-get install vim -y
 
-# webserver
+# install webserver
 RUN apt-get install nginx -y
 
-# python dependencies
+# install python dependencies
 RUN apt-get install python3.8 -y
 RUN apt-get install python3-pip -y
 RUN pip3 install RPi.GPIO
@@ -15,14 +15,19 @@ RUN pip3 install websockets
 # RUN pip3 install plib3-stdlib
 RUN apt-get install python-pkg-resources python3-pkg-resources -y
 
-# copy files
-WORKDIR /app
-COPY websocket_server.py /app
-COPY testgpio.py /app
-COPY init-container.sh /app
+# install Husarnet client
+RUN apt update && \
+    apt install -y curl && \
+    apt install -y gnupg2 && \
+    apt install -y systemd && \
+    curl https://install.husarnet.com/install.sh | bash
 
-COPY index.html /var/www/html/index.html
-COPY websocket_client.js /var/www/html/websocket_client.js
+# copy files
+COPY init-container.sh /opt
+
+WORKDIR /app
+COPY websocket_server.py testgpio.py /app/
+COPY index.html websocket_client.js /var/www/html/
 
 EXPOSE 80
 EXPOSE 8001
@@ -32,10 +37,4 @@ ENV JOINCODE place-your-joincode-here
 ENV BUTTON_PIN 23
 ENV LED_PIN 16
 
-RUN apt update && \
-    apt install -y curl && \
-    apt install -y gnupg2 && \
-    apt install -y systemd && \
-    curl https://install.husarnet.com/install.sh | bash
-
-CMD /app/init-container.sh
+CMD /opt/init-container.sh
