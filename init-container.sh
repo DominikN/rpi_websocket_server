@@ -31,8 +31,5 @@ done
 
 nginx
 husarnet join ${JOINCODE} ${HOSTNAME}
-
-sleep 2
-
 python3 websocket_server.py ${BUTTON_PIN} ${LED_PIN} &
 /bin/bash
