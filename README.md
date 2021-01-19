@@ -17,6 +17,10 @@ docker build -t hnet_ngnix_srv .
 docker run --rm --privileged -it -v /dev/net/tun:/dev/net/tun --cap-add NET_ADMIN --sysctl net.ipv6.conf.all.disable_ipv6=0 hnet_ngnix_srv
 ```
 
+```bash
+docker run --rm --privileged -it hnet_ngnix_srv
+```
+
 TODO: `--privileged` flag is only temporary to access RaspberryPi GPIO. Other options are mentioned here: https://stackoverflow.com/questions/30059784/docker-access-to-raspberry-pi-gpio-pins or `--cap-add SYS_RAWIO` option. But neither works ...
 
 
