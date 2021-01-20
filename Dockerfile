@@ -6,12 +6,12 @@ RUN apt update -y
 RUN apt install nginx -y
 
 # install python dependencies
-RUN apt install python3.8 -y
-RUN apt install python-pkg-resources python3-pkg-resources -y
-RUN apt install python3-pip -y
-RUN pip3 install RPi.GPIO
-RUN pip3 install gpiozero
-RUN pip3 install websockets
+RUN apt install python3.8 -y && \
+    apt install python-pkg-resources python3-pkg-resources -y && \
+    apt install python3-pip -y && \
+    pip3 install RPi.GPIO && \
+    pip3 install gpiozero && \
+    pip3 install websockets
 
 # install Husarnet client
 RUN apt update && \
