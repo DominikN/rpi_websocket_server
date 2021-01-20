@@ -33,8 +33,8 @@ COPY backend_src /app/
 COPY frontend_src /var/www/html/
 
 # get on app.husarnet.com
-ENV HOSTNAME place-your-hostname-here
-ENV JOINCODE place-your-joincode-here
+ENV HOSTNAME my-hnet-container
+ENV JOINCODE ""
 
 # define ports
 ENV HTTP_PORT 80
