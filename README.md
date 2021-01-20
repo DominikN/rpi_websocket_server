@@ -39,6 +39,24 @@ sudo docker run --rm --privileged -it \
 hnet_ngnix_srv
 ```
 
+if you place an `.env` file with environmental variables listed like:
+```
+HOSTNAME=dckrtest
+JOINCODE=fc94:b01d:1803:8dd8:3333:2222:1234:1111/xxxxxxxxxxxxxxxxx
+BUTTON_PIN=26
+LED_PIN=4
+HTTP_PORT=80
+WEBSOCKET_PORT=8001
+```
+
+You can then run the container like this:
+```bash
+sudo docker run --rm --privileged -it \
+--env-file ./.env \
+-v dckrtest_v:/var/lib/husarnet \
+hnet_ngnix_srv
+```
+
 TODO: `--privileged` flag is only temporary to access RaspberryPi GPIO. Other options are mentioned here: https://stackoverflow.com/questions/30059784/docker-access-to-raspberry-pi-gpio-pins or `--cap-add SYS_RAWIO` option. But neither works ...
 
 ### command for development
