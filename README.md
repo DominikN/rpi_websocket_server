@@ -17,10 +17,26 @@ docker build -t hnet_ngnix_srv .
 docker run --rm --privileged -it -v /dev/net/tun:/dev/net/tun --cap-add NET_ADMIN --sysctl net.ipv6.conf.all.disable_ipv6=0 hnet_ngnix_srv
 ```
 
-Add `/var/lib/husarnet` as a volume to retain Husarnet Client data if we remove the container:
+### Volumes (named)
+It's good for:
+- store container data (even `-rm` don't remove that)
+- share data between containers
+
+Add `-v dckrhostname_v:/var/lib/husarnet` as a volume to retain Husarnet Client data if we remove the container. `dckrhostname_v` could be whatever. You can name it the same as container, however multiple container can still access it.
+
+### Bind mounts
+It's good only for:
+- easy access to container logs
+- developing a code on your host that can be executed on container without re-running it
+- use it only in development, not in production (this is why you still need to COPY project files in the Dockerfile)
+
+Add `-v "/home/pi/tech/rpi_websocket_server/temp:/app/test:ro` as a volume to have a share folder between my host and container (add another annonymous volume `-v /app/test/whatever` (anonymous volume) to exclude `whatever` folder from container file system from synchronization). You can no override files created by container in this shared folder from a host, but the container can override files created by host. `ro` means read-only, so container can not write here.
+
+### command
 ```bash
-sudo docker run --rm --privileged -it --env HOSTNAME='dckrtest' --env JOINCODE='fc94:b01d:1803:8dd8:3333:2222:1234:1111/xxxxxxxxxxxxxxxxx' --env BUTTON_PIN='26' --env LED_PIN='4' -v dckrtest:/var/lib/husarnet hnet_ngnix_srv
+sudo docker run --rm --privileged -it --env HOSTNAME='dckrtest' --env JOINCODE='fc94:b01d:1803:8dd8:3333:2222:1234:1111/xxxxxxxxxxxxxxxxx' --env BUTTON_PIN='26' --env LED_PIN='4' -v dckrtest_v:/var/lib/husarnet hnet_ngnix_srv
 ```
+
 
 TODO: `--privileged` flag is only temporary to access RaspberryPi GPIO. Other options are mentioned here: https://stackoverflow.com/questions/30059784/docker-access-to-raspberry-pi-gpio-pins or `--cap-add SYS_RAWIO` option. But neither works ...
 
