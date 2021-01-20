@@ -74,6 +74,15 @@ sudo docker run --rm --privileged -it \
 hnet_ngnix_srv
 ```
 
+or (if you placed environment variables in `.env` file):
+```bash
+sudo docker run --rm --privileged -it \
+--env-file ./.env \
+-v dckrtest_v:/var/lib/husarnet \
+-v "/home/pi/tech/rpi_websocket_server/backend_src:/app:ro" \
+-v "/home/pi/tech/rpi_websocket_server/frontend_src:/var/www/html:ro" \
+hnet_ngnix_srv
+```
 
 ## open a website hosted by container
 
