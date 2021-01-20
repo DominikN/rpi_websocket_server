@@ -11,11 +11,7 @@ https://withblue.ink/2020/06/24/docker-and-docker-compose-on-raspberry-pi-os.htm
 docker build -t hnet_ngnix_srv .
 ```
 
-## run a container
-
-```bash
-docker run --rm --privileged -it -v /dev/net/tun:/dev/net/tun --cap-add NET_ADMIN --sysctl net.ipv6.conf.all.disable_ipv6=0 hnet_ngnix_srv
-```
+## run a container 
 
 ### Volumes (named)
 It's good for:
@@ -32,22 +28,34 @@ It's good only for:
 
 Add `-v "/home/pi/tech/rpi_websocket_server/temp:/app/test:ro` as a volume to have a share folder between my host and container (add another annonymous volume `-v /app/test/whatever` (anonymous volume) to exclude `whatever` folder from container file system from synchronization). You can no override files created by container in this shared folder from a host, but the container can override files created by host. `ro` means read-only, so container can not write here.
 
-### command
+### command for production
 ```bash
-sudo docker run --rm --privileged -it --env HOSTNAME='dckrtest' --env JOINCODE='fc94:b01d:1803:8dd8:3333:2222:1234:1111/xxxxxxxxxxxxxxxxx' --env BUTTON_PIN='26' --env LED_PIN='4' -v dckrtest_v:/var/lib/husarnet hnet_ngnix_srv
+sudo docker run --rm --privileged -it \
+--env HOSTNAME='dckrtest' \
+--env JOINCODE='fc94:b01d:1803:8dd8:3333:2222:1234:1111/xxxxxxxxxxxxxxxxx' \
+--env BUTTON_PIN='26' \
+--env LED_PIN='4' \
+-v dckrtest_v:/var/lib/husarnet \
+hnet_ngnix_srv
 ```
-
 
 TODO: `--privileged` flag is only temporary to access RaspberryPi GPIO. Other options are mentioned here: https://stackoverflow.com/questions/30059784/docker-access-to-raspberry-pi-gpio-pins or `--cap-add SYS_RAWIO` option. But neither works ...
 
+### command for development
 
-## execute inside container:
-
+If you run a container like this, and make changes in files on hosts, the changes will be available in the container file system
 ```bash
-husarnet join <PLACE_JOINCODE_HERE> mycontainer
-nginx
-python3 websocker_server.py
+sudo docker run --rm --privileged -it \
+--env HOSTNAME='dckrtest' \
+--env JOINCODE='fc94:b01d:1803:8dd8:3333:2222:1234:1111/xxxxxxxxxxxxxxxxx' \
+--env BUTTON_PIN='26' \
+--env LED_PIN='4' \
+-v dckrtest_v:/var/lib/husarnet \
+-v "/home/pi/tech/rpi_websocket_server/backend_src:/app:ro" \
+-v "/home/pi/tech/rpi_websocket_server/frontend_src:/var/www/html:ro" \
+hnet_ngnix_srv
 ```
+
 
 ## open a website hosted by container
 

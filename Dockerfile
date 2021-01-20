@@ -29,18 +29,19 @@ RUN apt install iputils-ping -y
 COPY init-container.sh /opt
 
 WORKDIR /app
-COPY websocket_server.py testgpio.py /app/
-COPY index.html websocket_client.js /var/www/html/
-
-# HTTP server port
-EXPOSE 80
-
-# Websocket server port
-EXPOSE 8001
+COPY backend_src /app/
+COPY frontend_src /var/www/html/
 
 # get on app.husarnet.com
 ENV HOSTNAME place-your-hostname-here
 ENV JOINCODE place-your-joincode-here
+
+# define ports
+ENV HTTP_PORT 80
+ENV WEBSOCKET_PORT 8001
+
+EXPOSE $HTTP_PORT
+EXPOSE $WEBSOCKET_PORT
 
 # Number of Raspberry Pi pins where button and LED are connected
 ENV BUTTON_PIN 23
