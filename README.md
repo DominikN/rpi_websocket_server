@@ -17,8 +17,9 @@ docker build -t hnet_ngnix_srv .
 docker run --rm --privileged -it -v /dev/net/tun:/dev/net/tun --cap-add NET_ADMIN --sysctl net.ipv6.conf.all.disable_ipv6=0 hnet_ngnix_srv
 ```
 
+Add `/var/lib/husarnet` as a volume to retain Husarnet Client data if we remove the container:
 ```bash
-sudo docker run --rm --privileged -it --env HOSTNAME='dckrtest' --env JOINCODE='fc94:b01d:1803:8dd8:3333:2222:1234:1111/xxxxxxxxxxxxxxxxx' --env BUTTON_PIN='26' --env LED_PIN='4' hnet_ngnix_srv
+sudo docker run --rm --privileged -it --env HOSTNAME='dckrtest' --env JOINCODE='fc94:b01d:1803:8dd8:3333:2222:1234:1111/xxxxxxxxxxxxxxxxx' --env BUTTON_PIN='26' --env LED_PIN='4' -v dckrtest:/var/lib/husarnet hnet_ngnix_srv
 ```
 
 TODO: `--privileged` flag is only temporary to access RaspberryPi GPIO. Other options are mentioned here: https://stackoverflow.com/questions/30059784/docker-access-to-raspberry-pi-gpio-pins or `--cap-add SYS_RAWIO` option. But neither works ...

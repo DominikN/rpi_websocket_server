@@ -23,6 +23,7 @@ RUN apt update && \
 # some optional modules
 RUN apt install vim -y
 RUN apt install fonts-emojione -y
+RUN apt install iputils-ping -y
 
 # copy project files into the image
 COPY init-container.sh /opt

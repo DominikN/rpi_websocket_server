@@ -41,7 +41,6 @@ do
     
     output=$( get_status < <(husarnet status) )
     echo "$output"
-    # echo $(($(date +%s%N)/1000000))
     
     if [[ $output != "waiting..." ]]; then
         break
