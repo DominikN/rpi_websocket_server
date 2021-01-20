@@ -32,7 +32,7 @@ function print_instruction() {
 sysctl net.ipv6.conf.lo.disable_ipv6=0
 
 echo ""
-echo "⏳ [1/2] Starting Husarnet daemon:"
+echo "⏳ [1/2] Initializing Husarnet Client:"
 husarnet daemon > /dev/null 2>&1 &
 
 for i in {1..10}
@@ -40,7 +40,8 @@ do
     sleep 1
     
     output=$( get_status < <(husarnet status) )
-    echo "[$i] $output"
+    echo "$output"
+    # echo $(($(date +%s%N)/1000000))
     
     if [[ $output != "waiting..." ]]; then
         break
@@ -50,7 +51,7 @@ done
 echo ""
 echo "🔥 [2/2] Connecting to Husarnet network as \"${HOSTNAME}\":"
 husarnet join ${JOINCODE} ${HOSTNAME}
-echo "done🎉"
+echo "done"
 echo ""
 
 print_instruction < <(husarnet status)
