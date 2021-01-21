@@ -45,8 +45,6 @@ HOSTNAME=dckrtest
 JOINCODE=fc94:b01d:1803:8dd8:3333:2222:1234:1111/xxxxxxxxxxxxxxxxx
 BUTTON_PIN=26
 LED_PIN=4
-HTTP_PORT=80
-WEBSOCKET_PORT=8001
 ```
 
 You can then run the container like this:

@@ -55,7 +55,6 @@ function WebSocketBegin() {
             alert(`[error] ${error.message}`);
         }
 
-
     } else {
         // The browser doesn't support WebSocket
         alert("WebSocket NOT supported by your Browser!");
