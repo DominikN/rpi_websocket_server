@@ -25,14 +25,6 @@ RUN apt install vim -y
 RUN apt install fonts-emojione -y
 RUN apt install iputils-ping -y
 
-# copy project files into the image
-COPY init-container.sh /opt
-
-COPY frontend_src /var/www/html/
-
-WORKDIR /app
-COPY backend_src /app/
-
 # HTTP PORT
 EXPOSE 80
 
@@ -47,4 +39,13 @@ ENV HOSTNAME my-hnet-container
 ENV BUTTON_PIN 23
 ENV LED_PIN 16
 
+# copy project files into the image
+COPY init-container.sh /opt
+
+COPY frontend_src /var/www/html/
+
+WORKDIR /app
+COPY backend_src /app/
+
+# run the container setup script
 CMD /opt/init-container.sh
