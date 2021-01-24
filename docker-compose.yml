@@ -1,0 +1,26 @@
+# https://docs.docker.com/compose/compose-file/
+version: "3.8"
+services: 
+  hnet_webserver_rpi:
+    build: ./
+    # build:
+    #   context: ./
+    #   dockerfile: Dockerfile
+    #   args:
+    #     my-arg1: 123
+    # image: 'hnet_ngnix_srv' # if the image is on dockerhub eg.
+    volumes:
+      - hnet_webserver_rpi_v:/var/lib/husarnet
+      - ./backend_src:/app:ro
+      - ./frontend_src:/var/www/html:ro
+    env_file: 
+      - ./.env
+    # depends_on: # if you want to start this service (container) after other service is started 
+    #   - other_service_name
+    privileged: true
+    stdin_open: true # docker run -i
+    tty: true        # docker run -t
+
+# only for named volumes
+volumes:
+  hnet_webserver_rpi_v:

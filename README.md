@@ -5,30 +5,33 @@ Web user interface for Raspberry Pi, available over the Internet and using webso
 
 https://withblue.ink/2020/06/24/docker-and-docker-compose-on-raspberry-pi-os.html
 
-## build the Docker image
 
+## run with docker-compose
+
+```bash
+sudo docker-compose up
+```
+
+## run with docker run
+
+### build the Docker image
+
+[optional 1] Sometimes it's good to remove old "dangling images" at first (add flag `-a` to remove all images):
+```bash
+sudo docker image prune
+```
+
+[optional 1] Sometimes it's good also to remove old containers:
+```bash
+sudo docker container prune
+```
+
+Run:
 ```bash
 docker build -t hnet_ngnix_srv .
 ```
 
-## run a container 
-
-### Volumes (named)
-It's good for:
-- store container data (even `-rm` don't remove that)
-- share data between containers
-
-Add `-v dckrhostname_v:/var/lib/husarnet` as a volume to retain Husarnet Client data if we remove the container. `dckrhostname_v` could be whatever. You can name it the same as container, however multiple container can still access it.
-
-### Bind mounts
-It's good only for:
-- easy access to container logs
-- developing a code on your host that can be executed on container without re-running it
-- use it only in development, not in production (this is why you still need to COPY project files in the Dockerfile)
-
-Add `-v "/home/pi/tech/rpi_websocket_server/temp:/app/test:ro` as a volume to have a share folder between my host and container (add another annonymous volume `-v /app/test/whatever` (anonymous volume) to exclude `whatever` folder from container file system from synchronization). You can no override files created by container in this shared folder from a host, but the container can override files created by host. `ro` means read-only, so container can not write here.
-
-### command for production
+### run command for production
 ```bash
 sudo docker run --rm --privileged -it \
 --env HOSTNAME='dckrtest' \
@@ -57,7 +60,7 @@ hnet_ngnix_srv
 
 TODO: `--privileged` flag is only temporary to access RaspberryPi GPIO. Other options are mentioned here: https://stackoverflow.com/questions/30059784/docker-access-to-raspberry-pi-gpio-pins or `--cap-add SYS_RAWIO` option. But neither works ...
 
-### command for development
+### run command for development
 
 If you run a container like this, and make changes in files on hosts, the changes will be available in the container file system
 ```bash
@@ -85,3 +88,20 @@ hnet_ngnix_srv
 ## open a website hosted by container
 
 On any other computer in the same Husarnet network as the container, open a Firefox and open: `http://mycontainer:80` URL.
+
+## INFO
+
+### Volumes (named)
+It's good for:
+- store container data (even `-rm` don't remove that)
+- share data between containers
+
+Add `-v dckrhostname_v:/var/lib/husarnet` as a volume to retain Husarnet Client data if we remove the container. `dckrhostname_v` could be whatever. You can name it the same as container, however multiple container can still access it.
+
+### Bind mounts
+It's good only for:
+- easy access to container logs
+- developing a code on your host that can be executed on container without re-running it
+- use it only in development, not in production (this is why you still need to COPY project files in the Dockerfile)
+
+Add `-v "/home/pi/tech/rpi_websocket_server/temp:/app/test:ro` as a volume to have a share folder between my host and container (add another annonymous volume `-v /app/test/whatever` (anonymous volume) to exclude `whatever` folder from container file system from synchronization). You can no override files created by container in this shared folder from a host, but the container can override files created by host. `ro` means read-only, so container can not write here.

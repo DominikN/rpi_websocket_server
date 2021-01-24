@@ -31,7 +31,7 @@ function print_instruction() {
 
 if [[ ${JOINCODE} == "" ]]; then
     echo ""
-    echo "ERROR: No JOINCODE provided in \"docker run ... \" command. Visit app.husarnet.com to get a JOINCODE"
+    echo "ERROR: no JOINCODE provided in \"docker run ... \" command. Visit https://app.husarnet.com to get a JOINCODE"
     echo ""
     /bin/bash
     exit
@@ -61,10 +61,10 @@ husarnet join ${JOINCODE} ${HOSTNAME}
 echo "done"
 echo ""
 
-print_instruction < <(husarnet status)
-
 nginx
 
 python3 websocket_server.py ${BUTTON_PIN} ${LED_PIN} &
+
+print_instruction < <(husarnet status)
 
 /bin/bash
