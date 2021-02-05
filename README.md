@@ -105,3 +105,13 @@ It's good only for:
 - use it only in development, not in production (this is why you still need to COPY project files in the Dockerfile)
 
 Add `-v "/home/pi/tech/rpi_websocket_server/temp:/app/test:ro` as a volume to have a share folder between my host and container (add another annonymous volume `-v /app/test/whatever` (anonymous volume) to exclude `whatever` folder from container file system from synchronization). You can no override files created by container in this shared folder from a host, but the container can override files created by host. `ro` means read-only, so container can not write here.
+
+
+Create:
+```bash
+sudo docker build -t ros .
+```
+Run:
+```bash
+sudo docker run -it --rm -p 3000:80 -p 3001:443 -p 8001:8001 ros:latest
+```
